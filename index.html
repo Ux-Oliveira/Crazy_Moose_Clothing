@@ -5,6 +5,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Crazy Moose Clothing — Ottawa, Canada</title>
 
+  <!-- Speed: preconnect to fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <!-- Speed: preload first-view images (desktop + mobile heroes) -->
+  <link rel="preload" as="image" href="sub3.png" imagesrcset="sub3.png">
+  <link rel="preload" as="image" href="slide2.jpg" imagesrcset="slide2.jpg">
+
   <!-- Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&family=Shrikhand&display=swap" rel="stylesheet">
 
@@ -124,7 +132,7 @@
     .mobile-hero a{position:absolute;inset:0;z-index:2}
     .mobile-hero .mh-zoom{position:relative;width:100%;height:62vh;min-height:320px;max-height:520px;overflow:hidden}
     .mobile-hero img{position:absolute;inset:-2px;width:calc(100% + 4px);height:calc(100% + 4px);object-fit:cover;object-position:center;animation:mobileSlide 7.5s ease-in-out infinite alternate}
-    .mobile-hero:hover img{transform:scale(1.03)} /* minor zoom on hover (mostly desktop emulators) */
+    .mobile-hero:hover img{transform:scale(1.03)}
     @keyframes mobileSlide {from{transform:translateX(-8%)} to{transform:translateX(8%)}}
 
     /* STORE */
@@ -243,6 +251,9 @@
       .brand .logo{height:26px}
       .to-top{width:52px;height:52px}
       section{padding:52px 0}
+
+      /* Performance: avoid fixed backgrounds on mobile */
+      .section-aboot{background-attachment: scroll;}
     }
   </style>
 </head>
@@ -255,14 +266,14 @@
 
   <!-- Back-to-top FAB with LOGO -->
   <a href="#home" class="to-top" aria-label="Back to top / Home">
-    <img src="logopre.png" alt="Crazy Moose logo">
+    <img src="logopre.png" alt="Crazy Moose logo" decoding="async">
   </a>
 
   <!-- NAV -->
   <header>
     <div class="wrap nav">
       <div class="brand">
-        <img src="logopre.png" alt="Crazy Moose Clothing" class="logo">
+        <img src="logopre.png" alt="Crazy Moose Clothing" class="logo" decoding="async">
         <small>Clothing · Ottawa</small>
       </div>
 
@@ -297,22 +308,24 @@
     <div class="grid-hero">
       <figure class="tile t-top">
         <a href="https://www.instagram.com/p/CX2TpxtjL7J/?hl=en&img_index=1" target="_blank" aria-label="Instagram 1"></a>
-        <div class="zoom"><img class="ph" src="sub3.png" alt="Crazy Moose banner"></div>
+        <div class="zoom">
+          <img class="ph" src="sub3.png" alt="Crazy Moose banner" fetchpriority="high" decoding="async">
+        </div>
       </figure>
 
       <figure class="tile t-left">
         <a href="https://www.instagram.com/p/CXmerKylqqo/?hl=en&img_index=1" target="_blank" aria-label="Instagram 2"></a>
-        <div class="zoom"><img class="ph" src="slide2.jpg" alt="Crazy Moose tall"></div>
+        <div class="zoom"><img class="ph" src="slide2.jpg" alt="Crazy Moose tall" decoding="async"></div>
       </figure>
 
       <figure class="tile t-rtop">
         <a href="https://www.instagram.com/p/Cz_4KH1guUd/?hl=en&img_index=1" target="_blank" aria-label="Instagram 3"></a>
-        <div class="zoom"><img class="ph" src="sub1.png" alt="Crazy Moose right top"></div>
+        <div class="zoom"><img class="ph" src="sub1.png" alt="Crazy Moose right top" decoding="async"></div>
       </figure>
 
       <figure class="tile t-rbot">
         <a href="https://www.instagram.com/p/Bv4GtddFgs6/?hl=en" target="_blank" aria-label="Instagram 4"></a>
-        <div class="zoom"><img class="ph" src="sub2.png" alt="Crazy Moose right bottom"></div>
+        <div class="zoom"><img class="ph" src="sub2.png" alt="Crazy Moose right bottom" decoding="async"></div>
       </figure>
     </div>
 
@@ -320,7 +333,7 @@
     <div class="mobile-hero">
       <a href="https://www.instagram.com/p/CXmerKylqqo/?hl=en&img_index=1" target="_blank" aria-label="Instagram Mobile Hero"></a>
       <div class="mh-zoom">
-        <img src="slide2.jpg" alt="Crazy Moose mobile hero">
+        <img src="slide2.jpg" alt="Crazy Moose mobile hero" fetchpriority="high" decoding="async">
       </div>
     </div>
   </section>
@@ -334,7 +347,7 @@
           <a href="https://maps.app.goo.gl/zduPjTPSBEfQbMkT9" target="_blank" rel="noopener" aria-label="Open in Google Maps"></a>
           <div class="map-inner">
             <iframe loading="lazy" referrerpolicy="no-referrer-when-downgrade"
-              src="https://www.google.com/maps?q=71+William+St,+Ottawa,+ON+K1N+9B7,+Canada&output=embed"></iframe>
+                    src="https://www.google.com/maps?q=71+William+St,+Ottawa,+ON+K1N+9B7,+Canada&output=embed"></iframe>
           </div>
         </div>
 
@@ -396,10 +409,17 @@
   </div>
 
   <script>
-    // Loader
-    window.addEventListener('load', () => {
-      document.getElementById('loader').classList.add('hide');
+    /* ===== Faster loader hide ===== */
+    const hideLoader = () => {
+      const el = document.getElementById('loader');
+      if (el && !el.classList.contains('hide')) el.classList.add('hide');
+    };
+    document.addEventListener('DOMContentLoaded', () => {
+      // Let the DOM paint, then hide quickly
+      setTimeout(hideLoader, 300);
     });
+    window.addEventListener('load', hideLoader);
+    setTimeout(hideLoader, 3000); // last-resort fallback
 
     // Smooth anchor scroll
     document.querySelectorAll('a[href^="#"]').forEach(a=>{
