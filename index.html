@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Crazy Moose Clothing — Ottawa, Canada</title>
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&family=Shrikhand&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --bg:#0f0f0f;
+      --card:#171717;
+      --soft:#222;
+      --text:#e9f3d1;
+      --brand:#5cc0ff;
+      --brown:#c9b39a1a;
+      --radius:22px;
+      --gap:18px;
+
+      --store-bg:#3E95A6;
+      --credit:#141414;
+    }
+    *{box-sizing:border-box}
+    html,body{margin:0;background:var(--bg);color:var(--text);font-family:"Space Grotesk",system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
+    a{color:var(--brand);text-decoration:none}
+    img{max-width:100%;display:block}
+    .wrap{max-width:1200px;margin:0 auto;padding:0 20px}
+
+    /* NAV */
+    header{
+      position:sticky;top:0;z-index:50;
+      backdrop-filter:saturate(1.2) blur(6px);
+      background:linear-gradient(180deg,rgba(15,15,15,.9),rgba(15,15,15,.6));
+      border-bottom:1px solid #222;
+    }
+    .nav{display:flex;align-items:center;justify-content:space-between;gap:20px;padding:14px 0;position:relative}
+    .brand{display:flex;align-items:center;gap:12px;font-weight:700;letter-spacing:.5px}
+    .brand .logo{height:28px;width:auto;display:block}
+    .brand small{opacity:.6;font-weight:600}
+
+    /* desktop links */
+    .links{display:flex;align-items:center}
+    .links a{
+      margin-left:18px;font-weight:600;opacity:.9;padding:.4rem .7rem;border-radius:12px;
+      transition:transform .2s ease, background .2s ease, opacity .2s ease;
+    }
+    .links a:hover{opacity:1;background:#1c1c1c;transform:translateY(-1px)}
+    .btn-news{
+      margin-left:18px;
+      padding:.5rem .85rem;border-radius:999px;color:#111;background:linear-gradient(90deg,#ff4d4d,#ff8a4d);
+      font-weight:800;letter-spacing:.2px;border:1px solid #00000020;box-shadow:0 2px 10px #ff6a0033;
+    }
+    .btn-news:hover{transform:translateY(-1px);background:linear-gradient(90deg,#ff5a5a,#ff9a5a)}
+
+    /* hamburger (hidden on desktop) */
+    .hamb{display:none;gap:6px;flex-direction:column;justify-content:center;align-items:center;width:42px;height:42px;border-radius:10px;border:1px solid #2a2a2a;background:#151515;color:#fff;cursor:pointer}
+    .hamb span{display:block;width:20px;height:2px;background:#eaeaea;border-radius:2px;transition:transform .2s ease,opacity .2s ease}
+    .hamb.open span:nth-child(1){transform:translateY(6px) rotate(45deg)}
+    .hamb.open span:nth-child(2){opacity:0}
+    .hamb.open span:nth-child(3){transform:translateY(-6px) rotate(-45deg)}
+
+    /* mobile dropdown panel */
+    @media (max-width: 820px){
+      .links{
+        display:none;position:absolute;top:100%;right:0;left:0;
+        background:rgba(15,15,15,.96);backdrop-filter:blur(8px);
+        border-bottom:1px solid #222;padding:10px 16px 14px;flex-direction:column;align-items:flex-start;gap:6px;
+      }
+      .links a, .btn-news{margin:0;width:100%}
+      .links.show{display:flex;animation:menuDrop .18s ease-out}
+      @keyframes menuDrop{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:translateY(0)}}
+      .hamb{display:flex}
+    }
+
+    /* LOGO STRIP */
+    .logo-strip{background:var(--brown);border-bottom:1px solid #24211c}
+    .logo-card{
+      margin:22px auto;border-radius:var(--radius);
+      padding:28px 20px;background:#201a1411;border:1px solid #3a342b33;
+      display:grid;place-items:center;text-align:center;
+    }
+    .logo-title{font-family:"Shrikhand", cursive;color:var(--text);font-size:clamp(26px,5vw,48px)}
+    .logo-sub{opacity:.75;margin-top:.35rem;font-size:.95rem}
+
+    section{padding:64px 0}
+    h2{font-size:clamp(24px,3.8vw,38px);margin:0 0 18px}
+    p.lead{opacity:.9;max-width:850px}
+
+    /* HOME – 4 tiles (desktop/tablet) */
+    .grid-hero{
+      display:grid;gap:var(--gap);
+      grid-template-columns: repeat(12,1fr);
+      grid-template-rows: 240px 200px 200px;
+      grid-template-areas:
+        "top top top top top top top top top top top top"
+        "left left left left rtop rtop rtop rtop rtop rtop rtop rtop"
+        "left left left left rbot rbot rbot rbot rbot rbot rbot rbot";
+      contain:layout paint; overflow:hidden; margin-bottom:8px;
+    }
+    .tile{
+      position:relative;overflow:hidden;border-radius:18px;
+      background:var(--card);border:1px solid #262626;
+      box-shadow:0 4px 20px #00000030 inset, 0 0 0 1px #00000020;
+      transform:translateZ(0);isolation:isolate;
+    }
+    .tile a{position:absolute;inset:0;z-index:3}
+    .tile .zoom{position:absolute;inset:-2px;width:calc(100% + 4px);height:calc(100% + 4px);transition:transform .25s ease;will-change:transform}
+    .tile:hover .zoom{transform:scale(1.05)}
+    .tile .ph{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center;will-change:transform}
+    .t-top{grid-area:top} .t-left{grid-area:left} .t-rtop{grid-area:rtop} .t-rbot{grid-area:rbot}
+    @keyframes slideFromLeft {0%{transform:translateX(-105%)} 15%,85%{transform:translateX(0)} 100%{transform:translateX(-105%)}}
+    @keyframes slideFromRight{0%{transform:translateX(105%)} 15%,85%{transform:translateX(0)} 100%{transform:translateX(105%)}}
+    @keyframes slideFromTop  {0%{transform:translateY(-105%)} 15%,85%{transform:translateY(0)} 100%{transform:translateY(-105%)}}
+    @keyframes slideFromBottom{0%{transform:translateY(105%)} 15%,85%{transform:translateY(0)} 100%{transform:translateY(105%)}}
+    .t-top .ph {animation:slideFromTop 4s linear infinite}
+    .t-left .ph{animation:slideFromLeft 4s linear infinite}
+    .t-rtop .ph{animation:slideFromRight 4s linear infinite}
+    .t-rbot .ph{animation:slideFromBottom 4s linear infinite}
+
+    /* MOBILE hero: single sliding image */
+    .mobile-hero{display:none;position:relative;overflow:hidden;border-radius:18px;border:1px solid #262626;background:#111}
+    .mobile-hero a{position:absolute;inset:0;z-index:2}
+    .mobile-hero .mh-zoom{position:relative;width:100%;height:62vh;min-height:320px;max-height:520px;overflow:hidden}
+    .mobile-hero img{position:absolute;inset:-2px;width:calc(100% + 4px);height:calc(100% + 4px);object-fit:cover;object-position:center;animation:mobileSlide 7.5s ease-in-out infinite alternate}
+    .mobile-hero:hover img{transform:scale(1.03)} /* minor zoom on hover (mostly desktop emulators) */
+    @keyframes mobileSlide {from{transform:translateX(-8%)} to{transform:translateX(8%)}}
+
+    /* STORE */
+    .section-store{
+      background:var(--store-bg);
+      color:#1a1a1a;
+      padding:84px 0;
+      margin-bottom:96px;
+      border-top:1px solid #00000012;border-bottom:1px solid #00000012;
+    }
+    .section-store h2{color:#202020}
+    .section-store .reviews,.section-store .map{border-color:#00000022;background:#fff;box-shadow:0 2px 10px #00000012}
+    .section-store .review{background:#D6762E;border-color:#00000018}
+    .section-store .meta{color:#333;opacity:.7}
+
+    .store{display:grid;gap:var(--gap);grid-template-columns: 1.15fr .85fr}
+    .map{border-radius:18px;overflow:hidden;border:1px solid #262626;background:#000;position:relative}
+    .map a{position:absolute;inset:0;z-index:2}
+    .map-inner{position:relative;height:100%;transition:transform .25s ease;transform-origin:center}
+    .map:hover .map-inner{transform:scale(1.03)}
+    .map iframe{width:100%;height:100%;min-height:420px;border:0;display:block;filter:saturate(1.05) contrast(1.02)}
+    .reviews{border-radius:18px;border:1px solid #262626;background:var(--card);padding:18px;display:flex;flex-direction:column;gap:12px}
+    .review{opacity:0;transition:opacity .5s ease;will-change:opacity;background:var(--soft);border:1px solid #2a2a2a;border-radius:16px;padding:16px;line-height:1.45}
+    .review.active{opacity:1}
+    .review .who{font-weight:700}.review .meta{opacity:.7;font-size:.9rem}
+
+    /* ABOOT */
+    .section-aboot{position:relative;background:url("aboot2.png") center/cover no-repeat fixed;padding:84px 0;border-top:1px solid #ffffff14}
+    .section-aboot::before{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,.55),rgba(0,0,0,.55))}
+    .section-aboot > .wrap{position:relative;z-index:1}
+    .aboot{border-radius:18px;border:1px solid #262626;background:#0f0f0fBB;padding:0;overflow:hidden}
+    .aboot .content{padding:48px}
+    .aboot p{max-width:850px;opacity:.95}
+    .pulse-btn{
+      display:inline-grid;place-items:center;gap:2px;
+      padding:16px 22px;border-radius:999px;
+      background:linear-gradient(90deg,#ff4d4d,#ff8a4d);
+      color:#111;font-weight:800;letter-spacing:.3px;border:none;cursor:pointer;
+      position:relative;overflow:hidden;margin-top:18px;
+      box-shadow:0 6px 24px #ff6a0036;
+      animation:breath 1.8s ease-in-out infinite;
+    }
+    .pulse-btn h1{font-size:clamp(18px,3.6vw,28px);margin:0}
+    @keyframes breath{0%,100%{transform:scale(1)} 50%{transform:scale(1.04)}}
+
+    /* LOADER */
+    .loader{position:fixed;inset:0;background:#0f0f0f;display:grid;place-items:center;z-index:1000;transition:opacity .5s ease, visibility .5s ease}
+    .loader.hide{opacity:0;visibility:hidden}
+    .loader .blocks{width:min(78vw,560px);height:min(46vw,330px);display:grid;gap:10px;grid-template-columns:repeat(4,1fr);grid-auto-rows:1fr;padding:10px}
+    .loader .b{border-radius:16px;background:#181818;border:1px solid #2a2a2a;box-shadow:inset 0 0 0 1px #ffffff12;animation:flash 1.2s ease-in-out infinite}
+    .loader .b:nth-child(2){animation-delay:.1s}.loader .b:nth-child(3){animation-delay:.2s}.loader .b:nth-child(4){animation-delay:.3s}
+    @keyframes flash{0%,100%{filter:brightness(1)}50%{filter:brightness(1.6)}}
+
+    /* Back-to-top FAB with LOGO */
+    .to-top{
+      position:fixed;right:22px;bottom:22px;z-index:60;
+      width:56px;height:56px;border-radius:50%;
+      display:grid;place-items:center;
+      background:#ffffffee;border:1px solid #00000022;box-shadow:0 6px 18px #00000035;
+      text-decoration:none;transition:transform .15s ease, opacity .15s ease;
+    }
+    .to-top:hover{transform:translateY(-2px)}
+    .to-top img{width:70%;height:70%;object-fit:contain;display:block}
+
+    /* Main footer */
+    footer.main{padding:50px 0 40px;opacity:.65}
+
+    /* Thin credit bar */
+    .credit{background:var(--credit);border-top:1px solid #1f1f1f;color:#9ea3a7;text-align:center;padding:8px 10px;font-size:12px;letter-spacing:.2px}
+
+    /* ===== Modal (Newsletter) ===== */
+    body.modal-open{overflow:hidden}
+    .modal-overlay{
+      position:fixed;inset:0;z-index:1002;
+      display:none;align-items:center;justify-content:center;
+      background:rgba(0,0,0,.35);
+      backdrop-filter: blur(8px) saturate(1.1);
+      -webkit-backdrop-filter: blur(8px) saturate(1.1);
+    }
+    .modal-overlay.show{display:flex}
+    .modal-wrap{position:relative; width:min(92vw,560px)}
+    .modal-card{
+      width:100%;
+      background:#fff;color:#111;border-radius:20px;
+      border:1px solid #00000018;
+      box-shadow:0 20px 60px rgba(0,0,0,.35);
+      position:relative;padding:28px 24px 24px;
+    }
+    .modal-close{
+      position:absolute;left:-18px;top:-18px;
+      width:40px;height:40px;border-radius:12px;border:1px solid #00000022;
+      background:#f3f3f3;display:grid;place-items:center;
+      font-weight:900;color:#444;cursor:pointer;
+      box-shadow:0 8px 20px rgba(0,0,0,.25);
+    }
+    .modal-close:hover{background:#eaeaea}
+    .modal-head h1{margin:6px 0;font-size:clamp(20px,4.6vw,28px);line-height:1.1}
+    .modal-form{margin-top:10px;display:grid;gap:12px}
+    .modal-form input{
+      width:100%;padding:14px 14px;border-radius:12px;border:1px solid #dddddd;
+      font-size:16px;outline:none;background:#fff;color:#111;
+    }
+    .modal-form input::placeholder{color:#9aa1a6}
+    .modal-actions{margin-top:8px}
+    .signup-btn{width:100%; text-align:center}
+    .signup-btn h1{margin:0}
+
+    /* RESPONSIVE BREAKPOINTS */
+    @media (max-width: 980px){
+      /* swap desktop hero for mobile hero */
+      .grid-hero{display:none}
+      .mobile-hero{display:block}
+
+      .store{grid-template-columns:1fr}
+      .map iframe{min-height:340px}
+      .brand .logo{height:26px}
+      .to-top{width:52px;height:52px}
+      section{padding:52px 0}
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Loader -->
+  <div class="loader" id="loader">
+    <div class="blocks"><div class="b"></div><div class="b"></div><div class="b"></div><div class="b"></div></div>
+  </div>
+
+  <!-- Back-to-top FAB with LOGO -->
+  <a href="#home" class="to-top" aria-label="Back to top / Home">
+    <img src="logopre.png" alt="Crazy Moose logo">
+  </a>
+
+  <!-- NAV -->
+  <header>
+    <div class="wrap nav">
+      <div class="brand">
+        <img src="logopre.png" alt="Crazy Moose Clothing" class="logo">
+        <small>Clothing · Ottawa</small>
+      </div>
+
+      <!-- Hamburger (mobile) -->
+      <button class="hamb" id="hamb" aria-label="Open menu" aria-expanded="false" aria-controls="navMenu">
+        <span></span><span></span><span></span>
+      </button>
+
+      <!-- Links -->
+      <nav class="links" id="navMenu">
+        <a href="#home" class="navlink">Home</a>
+        <a href="#store" class="navlink">Our Store</a>
+        <a href="#!" id="openNewsletter" class="btn-news">Newsletter</a>
+        <a href="#aboot" class="navlink">Aboot 🍁</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- LOGO STRIP -->
+  <div class="logo-strip">
+    <div class="wrap">
+      <div class="logo-card">
+        <div class="logo-title">Crazy Moose Clothing</div>
+        <div class="logo-sub">Slick Canadian streetwear · Bold souvenirs · Friendly vibes</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- HOME -->
+  <section id="home" class="wrap">
+    <!-- Desktop/Tablet 4-tile hero -->
+    <div class="grid-hero">
+      <figure class="tile t-top">
+        <a href="https://www.instagram.com/p/CX2TpxtjL7J/?hl=en&img_index=1" target="_blank" aria-label="Instagram 1"></a>
+        <div class="zoom"><img class="ph" src="sub3.png" alt="Crazy Moose banner"></div>
+      </figure>
+
+      <figure class="tile t-left">
+        <a href="https://www.instagram.com/p/CXmerKylqqo/?hl=en&img_index=1" target="_blank" aria-label="Instagram 2"></a>
+        <div class="zoom"><img class="ph" src="slide2.jpg" alt="Crazy Moose tall"></div>
+      </figure>
+
+      <figure class="tile t-rtop">
+        <a href="https://www.instagram.com/p/Cz_4KH1guUd/?hl=en&img_index=1" target="_blank" aria-label="Instagram 3"></a>
+        <div class="zoom"><img class="ph" src="sub1.png" alt="Crazy Moose right top"></div>
+      </figure>
+
+      <figure class="tile t-rbot">
+        <a href="https://www.instagram.com/p/Bv4GtddFgs6/?hl=en" target="_blank" aria-label="Instagram 4"></a>
+        <div class="zoom"><img class="ph" src="sub2.png" alt="Crazy Moose right bottom"></div>
+      </figure>
+    </div>
+
+    <!-- Mobile single-image hero (slide2.jpg, keeps sliding) -->
+    <div class="mobile-hero">
+      <a href="https://www.instagram.com/p/CXmerKylqqo/?hl=en&img_index=1" target="_blank" aria-label="Instagram Mobile Hero"></a>
+      <div class="mh-zoom">
+        <img src="slide2.jpg" alt="Crazy Moose mobile hero">
+      </div>
+    </div>
+  </section>
+
+  <!-- OUR STORE (full-width bg) -->
+  <section id="store" class="section-store">
+    <div class="wrap">
+      <h2 style="margin-top:0">Our Store</h2>
+      <div class="store">
+        <div class="map">
+          <a href="https://maps.app.goo.gl/zduPjTPSBEfQbMkT9" target="_blank" rel="noopener" aria-label="Open in Google Maps"></a>
+          <div class="map-inner">
+            <iframe loading="lazy" referrerpolicy="no-referrer-when-downgrade"
+              src="https://www.google.com/maps?q=71+William+St,+Ottawa,+ON+K1N+9B7,+Canada&output=embed"></iframe>
+          </div>
+        </div>
+
+        <aside class="reviews">
+          <div id="reviewBox" class="review"></div>
+        </aside>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOOT (section background image) -->
+  <section id="aboot" class="section-aboot">
+    <div class="wrap">
+      <div class="aboot">
+        <div class="content">
+          <h2>Aboot 🍁 Crazy Moose</h2>
+          <p>
+            Born in the heart of ByWard Market, Crazy Moose Clothing blends comfy, high-quality basics
+            with playful Ottawa &amp; 🇨🇦 energy. From “1867” hoodies to plaid moose fits and locally
+            loved souvenirs, we’re the cozy stop where tourists and locals score gifts that actually get worn.
+            Pop by, snap a pic with our giant moose, and join the herd.
+          </p>
+
+          <a class="pulse-btn" href="https://www.instagram.com/crazymooseofottawa/?hl=en" target="_blank" rel="noopener">
+            <h1>Follow us on Instagram</h1>
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="wrap main">
+    © <span id="yr"></span> Crazy Moose Clothing · 71 William St, Ottawa, ON K1N 9B7 · Canada
+  </footer>
+
+  <!-- ultra-thin centered credit bar -->
+  <div class="credit">landing page by Henrique Oliveira</div>
+
+  <!-- ===== Modal Markup ===== -->
+  <div class="modal-overlay" id="newsModal" role="dialog" aria-modal="true" aria-labelledby="newsTitle1" aria-describedby="newsDesc">
+    <div class="modal-wrap">
+      <button class="modal-close" id="closeModal" aria-label="Close newsletter popup">×</button>
+      <div class="modal-card">
+        <div class="modal-head">
+          <h1 id="newsTitle1">Stay in the Herd</h1>
+          <h1 id="newsTitle2">Get drops, deals &amp; moose news</h1>
+          <p id="newsDesc" style="margin:6px 0 2px;color:#444">Sign up and we’ll only email when it’s good.</p>
+        </div>
+
+        <form id="newsForm" class="modal-form" novalidate>
+          <input type="text" id="nameInput" name="name" placeholder="Your name" autocomplete="name" required />
+          <input type="email" id="emailInput" name="email" placeholder="you@example.com" autocomplete="email" required />
+          <div class="modal-actions">
+            <button type="submit" class="pulse-btn signup-btn"><h1>Sign me up</h1></button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Loader
+    window.addEventListener('load', () => {
+      document.getElementById('loader').classList.add('hide');
+    });
+
+    // Smooth anchor scroll
+    document.querySelectorAll('a[href^="#"]').forEach(a=>{
+      a.addEventListener('click', e=>{
+        const id = a.getAttribute('href').slice(1);
+        const el = document.getElementById(id);
+        if(el){ e.preventDefault(); el.scrollIntoView({behavior:'smooth', block:'start'}); }
+      });
+    });
+
+    // Footer year
+    document.getElementById('yr').textContent = new Date().getFullYear();
+
+    // Reviews rotator
+    const reviews = [
+      {who:"Jillian Roeder", meta:"3 reviews · 1 photo — ★★★★★ · a year ago", text:"I only had to go to one place for a souvenir this time around. Normally I go to about 5–6. This place is filled with amazing clothes and souvenirs. The clothing is almost every average girl and boy’s closet dream. They have basic t-shirts …"},
+      {who:"Gilbert Ko (Local Guide)", meta:"90 reviews · 701 photos — ★★★★★ · 4 years ago", text:"Bought hoodies from them before, great selection and prices. This time we are here for the ice cream 😛"},
+      {who:"Ivana Dalton (Local Guide)", meta:"66 reviews · 7 photos — ★★★★★ · a year ago", text:"Crazy Moose! Love it! Great place to shop for gifts, souvenirs, toys. Fun staff. Philip is awesome. Touring Ottawa found everything we wanted. Stocking up after March Break."},
+      {who:"Scott Murray (Local Guide)", meta:"30 reviews — ★★★★★ · 3 years ago", text:"GREAT place for souvenirs & Ottawa/Canada t-shirts. Prices are the best — we paid $10 for a sale tee and it's high quality, very comfortable. Great selection!"},
+      {who:"One ManGang (Local Guide)", meta:"279 reviews · 2 photos — ★★★★★ · 3 years ago", text:"Surprised with the friendly service and good selection of Ottawa/Canada clothing at reasonable prices."},
+      {who:"Jacob Portillo (Local Guide)", meta:"61 reviews · 46 photos — ★★★★★ · 5 years ago", text:"Got some really cool souvenirs to take home to Texas. Liked a shirt so much I ordered another by phone later — great customer service!"},
+      {who:"Rodolfo Vasconcelos (Local Guide)", meta:"32 reviews · 39 photos — ★★★★★ · 3 years ago", text:"Best place I’ve been to buy Canada souvenirs. Many T-shirts, sweaters and toques with Canada and Ottawa."},
+      {who:"Ryan Ozubko (Local Guide)", meta:"50 reviews · 498 photos — ★★★★★ · 9 years ago", text:"Came in to buy Ottawa souvenirs. Lots of items on sale."},
+      {who:"Isaac Toth (Local Guide)", meta:"78 reviews · 1 photo — ★★★★★ · 3 years ago", text:"Friendly staff; very nice assortment of Ottawa/Canada merch."},
+      {who:"Angélica Barraza (Local Guide)", meta:"38 reviews · 71 photos — ★★★★★ · 8 years ago", text:"Nice variety for a small store and reasonable prices."},
+    ];
+
+    const box = document.getElementById('reviewBox');
+    let idx = 0;
+    function renderReview(i){
+      const r = reviews[i % reviews.length];
+      box.innerHTML = `
+        <div class="who">${r.who}</div>
+        <div class="meta">${r.meta}</div>
+        <div style="margin-top:8px">${r.text}</div>
+      `;
+      requestAnimationFrame(()=> box.classList.add('active'));
+      setTimeout(()=> box.classList.remove('active'), 3500);
+    }
+    renderReview(idx++);
+    setInterval(()=>{ renderReview(idx++); }, 4000);
+
+    /* ===== Mobile nav (hamburger) ===== */
+    const hamb = document.getElementById('hamb');
+    const navMenu = document.getElementById('navMenu');
+    const navLinks = navMenu.querySelectorAll('.navlink, .btn-news');
+
+    function toggleMenu(open){
+      const willOpen = open ?? !navMenu.classList.contains('show');
+      navMenu.classList.toggle('show', willOpen);
+      hamb.classList.toggle('open', willOpen);
+      hamb.setAttribute('aria-expanded', String(willOpen));
+    }
+    hamb.addEventListener('click', ()=> toggleMenu());
+
+    // close when clicking a link
+    navLinks.forEach(l=> l.addEventListener('click', ()=> toggleMenu(false)));
+
+    // close when clicking outside panel (mobile)
+    document.addEventListener('click', (e)=>{
+      if(window.matchMedia('(max-width: 820px)').matches){
+        const inside = e.target.closest('#navMenu') || e.target.closest('#hamb');
+        if(!inside) toggleMenu(false);
+      }
+    });
+
+    /* ===== Newsletter Modal Logic ===== */
+    const LS_KEY = 'crazyMoose_newsletter_signed';
+    const modal = document.getElementById('newsModal');
+    const openBtn = document.getElementById('openNewsletter');
+    const closeBtn = document.getElementById('closeModal');
+    const form = document.getElementById('newsForm');
+    const nameInput = document.getElementById('nameInput');
+    const emailInput = document.getElementById('emailInput');
+
+    function openModal(){
+      modal.classList.add('show');
+      document.body.classList.add('modal-open');
+      setTimeout(()=> nameInput.focus(), 50);
+    }
+    function closeModal(){
+      modal.classList.remove('show');
+      document.body.classList.remove('modal-open');
+    }
+    openBtn.addEventListener('click', (e)=>{ e.preventDefault(); openModal(); });
+    closeBtn.addEventListener('click', closeModal);
+
+    // prevent overlay click from closing (explicit X only)
+    modal.addEventListener('click', (e)=>{
+      const inCard = e.target.closest('.modal-card') || e.target.closest('.modal-close');
+      if(!inCard) e.stopPropagation();
+    });
+
+    // Auto-open on load until signed
+    window.addEventListener('load', ()=>{
+      if(!localStorage.getItem(LS_KEY)){
+        openModal();
+      }
+    });
+
+    // Submit handler + remember on device
+    form.addEventListener('submit', (e)=>{
+      e.preventDefault();
+      const name = nameInput.value.trim();
+      const email = emailInput.value.trim();
+      const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+      if(!name || !emailOk){
+        if(!name) nameInput.style.borderColor = '#ff6a00';
+        if(!emailOk) emailInput.style.borderColor = '#ff6a00';
+        return;
+      }
+      // TODO: send to your backend / email provider here
+      localStorage.setItem(LS_KEY, '1');  // don't show again on this device
+      closeModal();
+    });
+  </script>
+</body>
+</html>
